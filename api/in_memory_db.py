@@ -6,6 +6,8 @@ import threading
 STEP = 2
 SLEEP_DURATION = 30
 SAVE_FILE = "results.json"
+MANAGERS_PROJECTS = "manager_projects.json"
+STUDENT_PREFERENCES = "student_preferences.json"
 
 
 # TODO: Read this preferences and projects from a file
@@ -32,12 +34,21 @@ class InMemoryDB:
         self.setup_data()
 
     def setup_data(self):
-        self.tick = 0
+        with open(MANAGERS_PROJECTS) as f:
+            self.manager_projects = json.load(f)
+        with open(STUDENT_PREFERENCES) as f:
+            self.student_preferences = json.load(f)
+        self.students = self.student_preferences.keys()
+        if len(self.students) > 0:
+            self.projects = self.student_preferences[self.students[0]]
+
+    def setup_sample_data(self):
         self.num_projects = 4
         self.manager_projects = {
             "M1": ["P1", "P2"],
             "M2": ["P3", "P4"]
         }
+
         self.projects = ["P1", "P2", "P3", "P4"]
         self.students = ["S1", "S2", "S3", "S4"]
         self.student_preferences = {

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from in_memory_db import InMemoryDB
 from flask_cors import CORS
 
@@ -18,6 +18,11 @@ def handle_errors(func):
         return response
     wrapper.func_name = func.func_name
     return wrapper
+
+
+@app.route('/static/<string:path>')
+def static_server(path):
+    return send_from_directory('../static', path)
 
 
 @handle_errors
@@ -56,6 +61,7 @@ def reset():
 def start_tick():
     success = db.start_tick()
     return jsonify({"success": success})
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

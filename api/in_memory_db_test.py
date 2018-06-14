@@ -7,6 +7,7 @@ class InMemoryDBTest(unittest.TestCase):
 
     def setUp(self):
         self.db = in_memory_db.InMemoryDB()
+        self.db.setup_sample_data()
 
     def tearDown(self):
         results_file = in_memory_db.SAVE_FILE
