@@ -11,14 +11,8 @@ MANAGERS_PROJECTS = "manager_projects.json"
 STUDENT_PREFERENCES = "student_preferences.json"
 
 
-# TODO: Read this preferences and projects from a file
-# TODO: After process is over(student/project list is empty maybe?), then store student-project data to file
 # TODO: Admin page which can start and reset the process. Based on name of ldap user we decide if he's admin
-
-
-# TODO IF TIME
 # TODO: Look at session and how we can secure post calls
-# TODO: Mongo DB?
 lock = threading.Lock()
 
 
