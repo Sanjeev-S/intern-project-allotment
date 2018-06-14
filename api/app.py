@@ -21,7 +21,7 @@ def handle_errors(func):
 
 
 @handle_errors
-@app.route('/project/<strigitng:project_name>', methods=["POST"])
+@app.route('/project/<string:project_name>', methods=["POST"])
 def select_student_for_project(project_name):
     if not request.json:
         raise Exception("Please provide a body with student_name")
