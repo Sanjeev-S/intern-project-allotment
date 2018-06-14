@@ -60,7 +60,7 @@ def reset():
 
 @app.route('/restart')
 @handle_errors
-def reset():
+def restart():
     global db
     db = InMemoryDB()
     success = db.start_tick()
