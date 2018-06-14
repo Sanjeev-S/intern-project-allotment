@@ -1,10 +1,8 @@
 from flask import Flask, request, jsonify, send_from_directory
 from in_memory_db import InMemoryDB
-from flask_cors import CORS
 
 
 app = Flask(__name__)
-CORS(app)
 db = InMemoryDB()
 
 
