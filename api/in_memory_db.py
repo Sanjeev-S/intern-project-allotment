@@ -2,6 +2,7 @@ import time
 import thread
 import json
 import threading
+import copy
 
 STEP = 2
 SLEEP_DURATION = 5
@@ -40,8 +41,7 @@ class InMemoryDB:
             self.student_preferences = json.load(f)
         self.students = self.student_preferences.keys()
         if len(self.students) > 0:
-            print "reach here"
-            self.projects = self.student_preferences[self.students[0]]
+            self.projects = copy.deepcopy(self.student_preferences[self.students[0]])
         self.num_projects = len(self.projects)
         self.update_projects_map()
 
@@ -80,6 +80,7 @@ class InMemoryDB:
 
     def select_student_for_project(self, student_name, project_name):
         try:
+            print len(self.student_preferences["S.Maneesha"])
             self.perform_concurrency_safe_removes(student_name, project_name)
             self.fix_student(student_name, project_name)
             self.update_projects_map()
@@ -90,14 +91,14 @@ class InMemoryDB:
 
     # TODO: Handle a half way bad delete
     def perform_concurrency_safe_removes(self, student_name, project_name):
-        with lock:
-            # raise key error if element not there
-            del self.student_preferences[student_name]
-            # raise value error if element not there
-            self.students.remove(student_name)
-            self.projects.remove(project_name)
-            for student in self.students:
-                self.student_preferences[student].remove(project_name)
+        # with lock:
+        # raise key error if element not there
+        del self.student_preferences[student_name]
+        # raise value error if element not there
+        self.students.remove(student_name)
+        self.projects.remove(project_name)
+        for student in self.students:
+            self.student_preferences[student].remove(project_name)
 
     def save_results(self):
         results = self.get_results()
