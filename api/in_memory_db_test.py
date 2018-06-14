@@ -41,7 +41,8 @@ class InMemoryDBTest(unittest.TestCase):
 
     def test_select_student_after_one_tick(self):
         self.db.force_tick()
-        self.db.select_student_for_project("S1", "P1")
+        success = self.db.select_student_for_project("S1", "P1")
+        self.assertTrue(success)
         live_map1 = self.db.get_students_live_for_project("P1")
         live_map2 = self.db.get_students_live_for_project("P2")
         self.assertEqual(live_map1, {"fixed": True, "students": ["S1"]})
