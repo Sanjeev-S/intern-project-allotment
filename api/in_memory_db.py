@@ -4,7 +4,7 @@ import json
 import threading
 
 STEP = 2
-SLEEP_DURATION = 10
+SLEEP_DURATION = 5
 SAVE_FILE = "results.json"
 MANAGERS_PROJECTS = "manager_projects.json"
 STUDENT_PREFERENCES = "student_preferences.json"
@@ -88,6 +88,7 @@ class InMemoryDB:
         except (KeyError, ValueError):
             return False
 
+    # TODO: Handle a half way bad delete
     def perform_concurrency_safe_removes(self, student_name, project_name):
         with lock:
             # raise key error if element not there
