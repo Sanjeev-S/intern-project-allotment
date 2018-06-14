@@ -58,6 +58,7 @@ def reset():
     db = InMemoryDB()
     return jsonify({"success": True})
 
+
 @app.route('/restart')
 @handle_errors
 def restart():

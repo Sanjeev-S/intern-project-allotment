@@ -66,6 +66,7 @@ class InMemoryDBTest(unittest.TestCase):
         success1 = self.db.select_student_for_project("S1", "P1")
         success2 = self.db.select_student_for_project("S1", "P1")
         self.assertEqual(success1, True)
+        print "I am " + str(success2)
         self.assertEqual(success2, False)
 
     def test_results_null(self):

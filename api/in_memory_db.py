@@ -73,6 +73,7 @@ class InMemoryDB:
         self.update_projects_map()
 
     def select_student_for_project(self, student_name, project_name):
+        print "Starting " + student_name
         try:
             self.perform_concurrency_safe_removes(student_name, project_name)
             self.fix_student(student_name, project_name)
@@ -82,10 +83,12 @@ class InMemoryDB:
         except (KeyError, ValueError):
             return False
 
-    # TODO: Handle a half way bad delete
     def perform_concurrency_safe_removes(self, student_name, project_name):
         with lock:
-        # raise key error if element not there
+            # doing so that half way deletes dont happen - case when one of student/project is selected and other is not
+            if student_name not in self.students or project_name not in self.projects:
+                raise KeyError
+            # raise key error if element not there
             del self.student_preferences[student_name]
             # raise value error if element not there
             self.students.remove(student_name)
