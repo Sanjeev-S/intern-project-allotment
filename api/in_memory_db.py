@@ -66,8 +66,6 @@ class InMemoryDB:
 
     def select_student_for_project(self, student_name, project_name):
         try:
-            if student_name not in self.students or project_name not in self.projects:
-                return False
             self.perform_concurrency_safe_removes(student_name, project_name)
             self.fix_student(student_name, project_name)
             self.update_projects_map()
