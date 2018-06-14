@@ -76,3 +76,11 @@ class InMemoryDBTest(unittest.TestCase):
         self.db.select_student_for_project("S1", "P1")
         results = self.db.get_results()
         self.assertEqual(results, {"P1": "S1"})
+
+    def test_get_projects_with_live_students(self):
+        self.db.force_tick()
+        projects_with_live_students = self.db.get_projects_with_live_students("M1")
+        self.assertEqual(projects_with_live_students, {
+            "P1": {"fixed": False, "students": ["S1", "S2"]},
+            "P2": {"fixed": False, "students": ["S4"]}
+        })

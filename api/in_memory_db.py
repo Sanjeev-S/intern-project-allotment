@@ -91,6 +91,12 @@ class InMemoryDB:
         with open(SAVE_FILE, 'w') as outfile:
             json.dump(results, outfile)
 
+    def get_projects_with_live_students(self, manager_name):
+        projects_with_live_students = {}
+        for project in self.get_projects(manager_name):
+            projects_with_live_students[project] = self.get_students_live_for_project(project)
+        return projects_with_live_students
+
     def get_projects(self, manager_name):
         return self.manager_projects.get(manager_name)
 

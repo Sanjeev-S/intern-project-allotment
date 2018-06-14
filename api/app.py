@@ -33,16 +33,9 @@ def select_student_for_project(project_name):
 
 
 @handle_errors
-@app.route('/project/<string:project_name>')
-def get_live_students(project_name):
-    live_map = db.get_students_live_for_project(project_name)
-    return jsonify(live_map)
-
-
-@handle_errors
 @app.route('/manager/<string:manager_name>')
-def get_projects(manager_name):
-    projects = db.get_projects(manager_name)
+def get_projects_with_live_students(manager_name):
+    projects = db.get_projects_with_live_students(manager_name)
     return jsonify(projects)
 
 @handle_errors
