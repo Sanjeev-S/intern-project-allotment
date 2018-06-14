@@ -1,0 +1,11 @@
+[
+  "in_memory_db_test.py::InMemoryDBTest::test_get_projects", 
+  "in_memory_db_test.py::InMemoryDBTest::test_get_students_live_after_one_tick", 
+  "in_memory_db_test.py::InMemoryDBTest::test_get_students_live_after_two_tick", 
+  "in_memory_db_test.py::InMemoryDBTest::test_get_students_live_null", 
+  "in_memory_db_test.py::InMemoryDBTest::test_results_after_one_selection", 
+  "in_memory_db_test.py::InMemoryDBTest::test_results_null", 
+  "in_memory_db_test.py::InMemoryDBTest::test_select_fails_for_same_after_one_try", 
+  "in_memory_db_test.py::InMemoryDBTest::test_select_student_after_one_tick", 
+  "in_memory_db_test.py::InMemoryDBTest::test_select_two_student_after_one_tick"
+]

@@ -4,8 +4,7 @@ import thread
 STEP = 2
 SLEEP_DURATION = 30
 
-# TODO: Does live student order matter?
-# TODO: Need to make part of select student for project atomic - concurrency case
+
 # TODO: Read this preferences and projects from a file
 # TODO: After process is over(student/project list is empty maybe?), then store student-project data to file
 # TODO: Admin page which can start and reset the process. Based on name of ldap user we decide if he's admin
@@ -96,6 +95,14 @@ class InMemoryDB:
             "students": [student_name],
             "fixed": True
         }
+
+    def get_results(self):
+        results = {}
+        for project, live_data in self.project_student_live_map.items():
+            if live_data["fixed"]:
+                results[project] = live_data["students"][0]
+        return results
+
 
 
 

@@ -59,3 +59,14 @@ class InMemoryDBTest(unittest.TestCase):
         success2 = self.db.select_student_for_project("S1", "P1")
         self.assertEqual(success1, True)
         self.assertEqual(success2, False)
+
+    def test_results_null(self):
+        self.db.force_tick()
+        results = self.db.get_results()
+        self.assertEqual(results, {})
+
+    def test_results_after_one_selection(self):
+        self.db.force_tick()
+        self.db.select_student_for_project("S1", "P1")
+        results = self.db.get_results()
+        self.assertEqual(results, {"P1": "S1"})
