@@ -1,8 +1,11 @@
 import time
 import thread
+import json
+import threading
 
 STEP = 2
 SLEEP_DURATION = 30
+SAVE_FILE = "results.json"
 
 
 # TODO: Read this preferences and projects from a file
@@ -13,6 +16,9 @@ SLEEP_DURATION = 30
 # TODO IF TIME
 # TODO: Look at session and how we can secure post calls
 # TODO: Mongo DB?
+lock = threading.Lock()
+
+
 class InMemoryDB:
 
     def __init__(self):
@@ -62,6 +68,16 @@ class InMemoryDB:
         try:
             if student_name not in self.students or project_name not in self.projects:
                 return False
+            self.perform_concurrency_safe_removes(student_name, project_name)
+            self.fix_student(student_name, project_name)
+            self.update_projects_map()
+            self.save_results()
+            return True
+        except (KeyError, ValueError):
+            return False
+
+    def perform_concurrency_safe_removes(self, student_name, project_name):
+        with lock:
             # raise key error if element not there
             del self.student_preferences[student_name]
             # raise value error if element not there
@@ -69,11 +85,11 @@ class InMemoryDB:
             self.projects.remove(project_name)
             for student in self.students:
                 self.student_preferences[student].remove(project_name)
-            self.fix_student(student_name, project_name)
-            self.update_projects_map()
-            return True
-        except (KeyError, ValueError):
-            return False
+
+    def save_results(self):
+        results = self.get_results()
+        with open(SAVE_FILE, 'w') as outfile:
+            json.dump(results, outfile)
 
     def get_projects(self, manager_name):
         return self.manager_projects.get(manager_name)

@@ -1,11 +1,17 @@
 import unittest
-from in_memory_db import InMemoryDB
+import in_memory_db
+import os
 
 
 class InMemoryDBTest(unittest.TestCase):
 
     def setUp(self):
-        self.db = InMemoryDB()
+        self.db = in_memory_db.InMemoryDB()
+
+    def tearDown(self):
+        results_file = in_memory_db.SAVE_FILE
+        if os.path.exists(results_file):
+            os.remove(results_file)
 
     def test_get_projects(self):
         projects1 = self.db.get_projects("M1")
