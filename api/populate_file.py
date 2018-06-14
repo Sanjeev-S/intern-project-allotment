@@ -9,6 +9,7 @@ def populateStudentPreferences(csv_file):
     projects = []
     manager_projects = {}
     for row in csv_reader:
+        print row
         students.append(row[0])
         projects.append(row[2])
         manager_unique_name = row[1].split("@")[0]

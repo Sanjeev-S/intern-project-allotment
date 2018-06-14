@@ -4,7 +4,7 @@ import json
 import threading
 
 STEP = 2
-SLEEP_DURATION = 30
+SLEEP_DURATION = 10
 SAVE_FILE = "results.json"
 MANAGERS_PROJECTS = "manager_projects.json"
 STUDENT_PREFERENCES = "student_preferences.json"
@@ -40,7 +40,10 @@ class InMemoryDB:
             self.student_preferences = json.load(f)
         self.students = self.student_preferences.keys()
         if len(self.students) > 0:
+            print "reach here"
             self.projects = self.student_preferences[self.students[0]]
+        self.num_projects = len(self.projects)
+        self.update_projects_map()
 
     def setup_sample_data(self):
         self.num_projects = 4
@@ -102,12 +105,16 @@ class InMemoryDB:
 
     def get_projects_with_live_students(self, manager_name):
         projects_with_live_students = {}
+
         for project in self.get_projects(manager_name):
             projects_with_live_students[project] = self.get_students_live_for_project(project)
         return projects_with_live_students
 
     def get_projects(self, manager_name):
-        return self.manager_projects.get(manager_name)
+        projects = self.manager_projects.get(manager_name)
+        if not projects:
+            raise Exception("manager does not exist")
+        return projects
 
     def get_students_live_for_project(self, project_name):
         return self.project_student_live_map.get(project_name)

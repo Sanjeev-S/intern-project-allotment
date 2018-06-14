@@ -23,8 +23,8 @@ def static_server(path):
     return send_from_directory('../static', path)
 
 
-@handle_errors
 @app.route('/project/<string:project_name>', methods=["POST"])
+@handle_errors
 def select_student_for_project(project_name):
     if not request.json:
         raise Exception("Please provide a body with student_name")
@@ -35,27 +35,30 @@ def select_student_for_project(project_name):
     return jsonify({"success": success})
 
 
-@handle_errors
-@app.route('/manager/<string:manager_name>')
-def get_projects_with_live_students(manager_name):
-    projects = db.get_projects_with_live_students(manager_name)
-    return jsonify(projects)
-
-@handle_errors
 @app.route('/result')
+@handle_errors
 def result():
     results = db.get_results()
     return jsonify(results)
 
+
+@app.route('/manager/<string:manager_name>')
 @handle_errors
+def get_projects_with_live_students(manager_name):
+    projects = db.get_projects_with_live_students(manager_name)
+    return jsonify(projects)
+
+
 @app.route('/reset')
+@handle_errors
 def reset():
     global db
     db = InMemoryDB()
     return jsonify({"success": True})
 
-@handle_errors
+
 @app.route('/start')
+@handle_errors
 def start_tick():
     success = db.start_tick()
     return jsonify({"success": success})

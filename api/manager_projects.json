@@ -10,13 +10,22 @@
         "Consumer Metrics, Next 100 Million"
     ], 
     "m13": [
-        "Designing and automating RCA framework for Last Mile Delivery\r\nVijay M Giri,m14@m.com,Analyse efficient alternative for Vertica HPE for big data use cases of Flipkart\r\nKarthik,m15@m.com,MySql As A Service\r\nShubham Gupta,m16@m.com,Develop Front-end of security team dashboard using ReactJS"
+        "Designing and automating RCA framework for Last Mile Delivery"
     ], 
     "m12": [
         "Anomaly Detection"
     ], 
+    "m15": [
+        "MySql As A Service"
+    ], 
+    "m14": [
+        "Analyse efficient alternative for Vertica HPE for big data use cases of Flipkart"
+    ], 
     "m17": [
         "Integration of mobile sorting robot technology by Hikvision in MotherHub; Staging Systematisation; STSG asks (e.g. Bastion Onboarding)"
+    ], 
+    "m16": [
+        "Develop Front-end of security team dashboard using ReactJS"
     ], 
     "m19": [
         "Breach Analysis, RCA of Breach causes and recommendations for reduction in breach"
