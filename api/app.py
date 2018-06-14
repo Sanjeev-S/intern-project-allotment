@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 from in_memory_db import InMemoryDB
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 db = InMemoryDB()
 
 
@@ -30,17 +33,16 @@ def select_student_for_project(project_name):
 
 
 @handle_errors
-@app.route('/project/<string:project_name>')
-def get_live_students(project_name):
-    live_map = db.get_students_live_for_project(project_name)
-    return jsonify(live_map)
-
+@app.route('/manager/<string:manager_name>')
+def get_projects_with_live_students(manager_name):
+    projects = db.get_projects_with_live_students(manager_name)
+    return jsonify(projects)
 
 @handle_errors
-@app.route('/manager/<string:manager_name>')
-def get_projects(manager_name):
-    projects = db.get_projects(manager_name)
-    return jsonify(projects)
+@app.route('/result')
+def result():
+    results = db.get_results()
+    return jsonify(results)
 
 @handle_errors
 @app.route('/reset')

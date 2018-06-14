@@ -1,11 +1,13 @@
 import time
 import thread
+import json
+import threading
 
 STEP = 2
 SLEEP_DURATION = 30
+SAVE_FILE = "results.json"
 
-# TODO: Does live student order matter?
-# TODO: Need to make part of select student for project atomic - concurrency case
+
 # TODO: Read this preferences and projects from a file
 # TODO: After process is over(student/project list is empty maybe?), then store student-project data to file
 # TODO: Admin page which can start and reset the process. Based on name of ldap user we decide if he's admin
@@ -14,6 +16,9 @@ SLEEP_DURATION = 30
 # TODO IF TIME
 # TODO: Look at session and how we can secure post calls
 # TODO: Mongo DB?
+lock = threading.Lock()
+
+
 class InMemoryDB:
 
     def __init__(self):
@@ -61,8 +66,16 @@ class InMemoryDB:
 
     def select_student_for_project(self, student_name, project_name):
         try:
-            if student_name not in self.students or project_name not in self.projects:
-                return False
+            self.perform_concurrency_safe_removes(student_name, project_name)
+            self.fix_student(student_name, project_name)
+            self.update_projects_map()
+            self.save_results()
+            return True
+        except (KeyError, ValueError):
+            return False
+
+    def perform_concurrency_safe_removes(self, student_name, project_name):
+        with lock:
             # raise key error if element not there
             del self.student_preferences[student_name]
             # raise value error if element not there
@@ -70,11 +83,17 @@ class InMemoryDB:
             self.projects.remove(project_name)
             for student in self.students:
                 self.student_preferences[student].remove(project_name)
-            self.fix_student(student_name, project_name)
-            self.update_projects_map()
-            return True
-        except (KeyError, ValueError):
-            return False
+
+    def save_results(self):
+        results = self.get_results()
+        with open(SAVE_FILE, 'w') as outfile:
+            json.dump(results, outfile)
+
+    def get_projects_with_live_students(self, manager_name):
+        projects_with_live_students = {}
+        for project in self.get_projects(manager_name):
+            projects_with_live_students[project] = self.get_students_live_for_project(project)
+        return projects_with_live_students
 
     def get_projects(self, manager_name):
         return self.manager_projects.get(manager_name)
@@ -96,6 +115,14 @@ class InMemoryDB:
             "students": [student_name],
             "fixed": True
         }
+
+    def get_results(self):
+        results = {}
+        for project, live_data in self.project_student_live_map.items():
+            if live_data["fixed"]:
+                results[project] = live_data["students"][0]
+        return results
+
 
 
 

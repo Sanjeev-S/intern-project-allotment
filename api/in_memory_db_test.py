@@ -1,11 +1,17 @@
 import unittest
-from in_memory_db import InMemoryDB
+import in_memory_db
+import os
 
 
 class InMemoryDBTest(unittest.TestCase):
 
     def setUp(self):
-        self.db = InMemoryDB()
+        self.db = in_memory_db.InMemoryDB()
+
+    def tearDown(self):
+        results_file = in_memory_db.SAVE_FILE
+        if os.path.exists(results_file):
+            os.remove(results_file)
 
     def test_get_projects(self):
         projects1 = self.db.get_projects("M1")
@@ -59,3 +65,22 @@ class InMemoryDBTest(unittest.TestCase):
         success2 = self.db.select_student_for_project("S1", "P1")
         self.assertEqual(success1, True)
         self.assertEqual(success2, False)
+
+    def test_results_null(self):
+        self.db.force_tick()
+        results = self.db.get_results()
+        self.assertEqual(results, {})
+
+    def test_results_after_one_selection(self):
+        self.db.force_tick()
+        self.db.select_student_for_project("S1", "P1")
+        results = self.db.get_results()
+        self.assertEqual(results, {"P1": "S1"})
+
+    def test_get_projects_with_live_students(self):
+        self.db.force_tick()
+        projects_with_live_students = self.db.get_projects_with_live_students("M1")
+        self.assertEqual(projects_with_live_students, {
+            "P1": {"fixed": False, "students": ["S1", "S2"]},
+            "P2": {"fixed": False, "students": ["S4"]}
+        })
