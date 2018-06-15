@@ -41,7 +41,26 @@ def select_student_for_project(project_name):
 @handle_errors
 def result():
     results = db.get_results()
-    return render_template("result.html", results=results)
+    columns = [
+        {
+            "field": "name",  # which is the field's name of data key
+            "title": "Student Name",  # display as the table header's name
+            "sortable": True,
+        },
+        {
+            "field": "project",
+            "title": "Project Name",
+            "sortable": True,
+        }
+    ]
+    data = []
+    for project, student in results.iteritems():
+        data.append({
+            "name": student,
+            "project": project
+        })
+
+    return render_template("table.html", data=data, columns=columns, title='Allocated Interns')
 
 
 @app.route('/manager/<string:manager_name>')
@@ -49,6 +68,12 @@ def result():
 def get_projects_with_live_students(manager_name):
     projects = db.get_projects_with_live_students(manager_name)
     return jsonify(projects)
+
+@app.route('/dashboard')
+@handle_errors
+def home():
+    user = "sanjeev.s"
+    return render_template("home.html", user=user)
 
 
 @app.route('/reset')
