@@ -5,7 +5,7 @@ import threading
 import copy
 
 STEP = 2
-SLEEP_DURATION = 5
+SLEEP_DURATION = 30
 SAVE_FILE = "results.json"
 MANAGERS_PROJECTS = "manager_projects.json"
 STUDENT_PREFERENCES = "student_preferences.json"
@@ -73,7 +73,6 @@ class InMemoryDB:
         self.update_projects_map()
 
     def select_student_for_project(self, student_name, project_name):
-        print "Starting " + student_name
         try:
             self.perform_concurrency_safe_removes(student_name, project_name)
             self.fix_student(student_name, project_name)

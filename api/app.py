@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template
 from in_memory_db import InMemoryDB
 from flask_cors import CORS
 
@@ -41,7 +41,7 @@ def select_student_for_project(project_name):
 @handle_errors
 def result():
     results = db.get_results()
-    return jsonify(results)
+    return render_template("result.html", results=results)
 
 
 @app.route('/manager/<string:manager_name>')
